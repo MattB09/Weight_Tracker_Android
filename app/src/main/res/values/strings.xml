@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Weight Tracker</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="enter_weight_text">Enter your weight</string>
+    <string name="enter_the_date">Enter the date (yyyy/mm/dd)</string>
+    <string name="today_weight">You haven\'t weighed in today</string>
+    <string name="save_button_text">Save</string>
+</resources>
