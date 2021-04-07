@@ -6,6 +6,7 @@ import android.text.Html
 import android.text.Spanned
 import android.util.Log
 import androidx.core.text.HtmlCompat
+import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -19,7 +20,10 @@ import java.time.format.DateTimeFormatter
 class HomeViewModel(val database: WeightDatabaseDao, application: Application)
         : AndroidViewModel(application) {
 
-    var weightString = MutableLiveData<String>("You haven't weighed in yet")
+    var weightString = MutableLiveData<String>("You haven't weighed in yet");
+    val weightInput = ObservableField<String>()
+    val dateInput = ObservableField<String>()
+
     private val days = database.getAllEntries()
     val daysDisplay = Transformations.map(days) {days ->
         formatDays(days)
@@ -32,8 +36,8 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
                 append("<h3>Your weight data: </h3>")
             }
             days.forEach {
+                append("${it.date}  -  ${it.weight}kgs")
                 append("<br/>")
-                append("<b>Date:<b>${it.date} <b>Weight:</b>${it.weight}")
             }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -67,15 +71,32 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
 
     fun onSaveWeight() {
         viewModelScope.launch {
-//            var weightEdit = enter_weight_edit_text
-            var weight: Double = 68.0
-            var date: String = "2021/04/06"
-            val newWeight = WeightEntry(0L, weight, date)
-            insert(newWeight)
+            // Log.d("WEIGHT_EDIT_VALUE", weightInput.get().toString())
+            var weight: Double = weightInput.get()?.toDouble() ?: return@launch
+            var date: String = dateInput.get() ?: return@launch
+            var exists: WeightEntry? = null
+            Transformations.map(days) {
+                days -> exists = days.find{it.date == date}
+            }
+
+            //Log.d("DUPLICATE_CHECK", duplicate.toString())
+            if (exists != null) {
+                Log.d("DUPLICATE_CHECK", exists.toString())
+                var id = exists!!.weightId
+                val editWeight = WeightEntry(id.toLong(), weight, date)
+                update(editWeight)
+            } else {
+                val newWeight = WeightEntry(0L, weight, date)
+                insert(newWeight)
+            }
         }
     }
 
     private suspend fun insert(weight: WeightEntry) {
         database.insert(weight)
+    }
+
+    private suspend fun update(weight: WeightEntry) {
+        database.update(weight)
     }
 }

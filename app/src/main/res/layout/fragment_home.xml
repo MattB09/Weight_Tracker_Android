@@ -48,6 +48,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:inputType="numberDecimal"
+            android:text="@={homeViewModel.weightInput}"
             app:layout_constraintTop_toBottomOf="@id/enter_weight_text_view" />
 
         <TextView
@@ -70,6 +71,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:inputType="date"
+            android:text="@={homeViewModel.dateInput}"
             app:layout_constraintTop_toBottomOf="@id/enter_date_text_view" />
 
         <Button
