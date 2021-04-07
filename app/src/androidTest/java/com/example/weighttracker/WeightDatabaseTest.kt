@@ -45,14 +45,15 @@ class WeightDatabaseTest {
         val entered = weightDao.getRecent()
         Assert.assertEquals(entered?.weight, 67.0)
     }
-//    @Test
-//    @Throws(Exception::class)
-//    suspend fun insertAndGetDate() {
-//        val entry = WeightEntry(date="2021/04/01", weight = 67.0)
-//        weightDao.insert(entry)
-//        val entered = weightDao.getRecent()
-//        Assert.assertEquals(entered?.date, "2021/04/01")
-//    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertAndGetDate() {
+        val entry = WeightEntry(date="2021/04/01", weight = 67.0)
+        weightDao.insert(entry)
+        val entered = weightDao.getRecent()
+        Assert.assertEquals(entered?.date, "2021/04/01")
+    }
 
 //    @Test
 //    @Throws(Exception::class)

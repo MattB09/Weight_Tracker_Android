@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName="weight_entries")
 data class WeightEntry(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name="id")
     val id: Int,
 
     @ColumnInfo(name="weight")
