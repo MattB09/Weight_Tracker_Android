@@ -7,14 +7,11 @@ import androidx.room.PrimaryKey
 @Entity(tableName="weight_entries")
 data class WeightEntry(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name="id")
-    val id: Int,
+    val weightId: Long = 0L,
 
     @ColumnInfo(name="weight")
     var weight: Double,
 
     @ColumnInfo(name="date")
     var date: String
-) {
-    constructor(weight: Double, date: String): this(Int.MIN_VALUE, weight, date)
-}
+)

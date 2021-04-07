@@ -22,7 +22,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:textSize="20sp"
-            android:text="@string/today_weight"
+            android:text="@{homeViewModel.weightString}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -78,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/save_button_text"
+            android:onClick="@{() -> homeViewModel.onSaveWeight()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/enter_date_edit_text" />
@@ -95,11 +96,12 @@
             <TextView
                 android:id="@+id/history_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@{homeViewModel.daysDisplay}" />
 <!--                android:layout_marginStart="@dimen/margin"-->
 <!--                android:layout_marginTop="@dimen/margin"-->
-<!--                android:layout_marginEnd="@dimen/margin" -->
-<!--                android:text="@{homeViewModel.historyList}"-->
+<!--                android:layout_marginEnd="@dimen/margin"-->
+
 
         </ScrollView>
 

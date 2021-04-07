@@ -10,20 +10,20 @@ import androidx.room.Update
 interface WeightDatabaseDao {
 
     @Insert
-    suspend fun insert(weight: WeightEntry)
+    suspend fun insert(weight: WeightEntry) : Long
 
     @Update
     suspend fun update(weight: WeightEntry)
 
-    @Query("SELECT * FROM weight_entries ORDER BY date")
+    @Query("SELECT * FROM weight_entries ORDER BY date DESC")
     fun getAllEntries(): LiveData<List<WeightEntry>>
 
-    @Query("SELECT * FROM weight_entries WHERE id = :key")
-    suspend fun getEntry(key: Int): WeightEntry?
+    @Query("SELECT * FROM weight_entries WHERE weightId = :key")
+    suspend fun getEntry(key: Long): WeightEntry?
 
     @Query("SELECT * FROM weight_entries WHERE date = :day")
     suspend fun getDay(day: String): WeightEntry?
 
-    @Query("SELECT * FROM weight_entries ORDER BY id LIMIT 1")
+    @Query("SELECT * FROM weight_entries ORDER BY weightId LIMIT 1")
     suspend fun getRecent(): WeightEntry?
 }
