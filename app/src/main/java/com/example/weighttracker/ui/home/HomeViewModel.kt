@@ -24,6 +24,14 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
     val weightInput = ObservableField<String>()
     val dateInput = ObservableField<String>()
 
+    private val todayString = makeTodayString()
+
+    private fun makeTodayString(): String {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        return current.format(formatter).toString()
+    }
+
     private val days = database.getAllEntries()
     val daysDisplay = Transformations.map(days) {days ->
         formatDays(days)
@@ -62,11 +70,7 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
     }
 
     private suspend fun getTodayFromDB(): WeightEntry? {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-        val formattedDay = current.format(formatter).toString()
-        println("formatted day for today $formattedDay")
-        return database.getDay(formattedDay)
+        return database.getDay(todayString)
     }
 
     fun onSaveWeight() {
@@ -88,6 +92,9 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
             } else {
                 val newWeight = WeightEntry(0L, weight, date)
                 insert(newWeight)
+            }
+            if (date == todayString) {
+                weightString.value = "Today's weight: ${weight.toString()}kgs"
             }
         }
     }
