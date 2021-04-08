@@ -18,6 +18,9 @@ interface WeightDatabaseDao {
     @Query("SELECT * FROM weight_entries ORDER BY date DESC")
     fun getAllEntries(): LiveData<List<WeightEntry>>
 
+    @Query("SELECT * FROM weight_entries ORDER BY date ASC")
+    fun getEntriesForGraph(): LiveData<List<WeightEntry>>
+
     @Query("SELECT * FROM weight_entries WHERE weightId = :key")
     suspend fun getEntry(key: Long): WeightEntry?
 

@@ -75,19 +75,12 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
 
     fun onSaveWeight() {
         viewModelScope.launch {
-            // Log.d("WEIGHT_EDIT_VALUE", weightInput.get().toString())
             var weight: Double = weightInput.get()?.toDouble() ?: return@launch
             var date: String = dateInput.get() ?: return@launch
-            var exists: WeightEntry? = null
-            Transformations.map(days) {
-                days -> exists = days.find{it.date == date}
-            }
+            var exists = database.getDay(date)
 
-            //Log.d("DUPLICATE_CHECK", duplicate.toString())
             if (exists != null) {
-                Log.d("DUPLICATE_CHECK", exists.toString())
-                var id = exists!!.weightId
-                val editWeight = WeightEntry(id.toLong(), weight, date)
+                val editWeight = WeightEntry(exists.weightId, weight, date)
                 update(editWeight)
             } else {
                 val newWeight = WeightEntry(0L, weight, date)
@@ -97,6 +90,12 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
                 weightString.value = "Today's weight: ${weight.toString()}kgs"
             }
         }
+    }
+
+    private fun checkExists(days: List<WeightEntry>?, date: String): Long? {
+        var entry = days?.find{it.date == date}
+        if (entry != null) return entry.weightId
+        return null
     }
 
     private suspend fun insert(weight: WeightEntry) {
