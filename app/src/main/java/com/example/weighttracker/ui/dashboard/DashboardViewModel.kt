@@ -26,7 +26,7 @@ class DashboardViewModel(val database: WeightDatabaseDao, application: Applicati
         val today = LocalDate.now()
         val endDate = LocalDate.parse(date, df)
         val period = Period.between(endDate, today)
-        return period.getDays()
+        return (period.getYears() * 365) + (period.getMonths() * 30) + period.getDays()
     }
 
     private val days = database.getEntriesForGraph()

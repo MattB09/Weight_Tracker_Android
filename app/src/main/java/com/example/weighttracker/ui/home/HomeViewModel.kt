@@ -14,13 +14,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.weighttracker.database.WeightDatabaseDao
 import com.example.weighttracker.database.WeightEntry
 import kotlinx.coroutines.launch
+import java.text.ParseException
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class HomeViewModel(val database: WeightDatabaseDao, application: Application)
         : AndroidViewModel(application) {
 
-    var weightString = MutableLiveData<String>("You haven't weighed in yet");
+    var weightString = MutableLiveData<String>("Today's weight: not yet logged...");
     val weightInput = ObservableField<String>()
     val dateInput = ObservableField<String>()
 
@@ -75,10 +77,23 @@ class HomeViewModel(val database: WeightDatabaseDao, application: Application)
 
     fun onSaveWeight() {
         viewModelScope.launch {
+            // get data and validations
             var weight: Double = weightInput.get()?.toDouble() ?: return@launch
             var date: String = dateInput.get() ?: return@launch
-            var exists = database.getDay(date)
+            if (date > todayString) return@launch
 
+            val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+            try {
+                val isDate = LocalDate.parse(date, formatter)
+                date = isDate.format(formatter).toString()
+            } catch(e: ParseException) {
+                return@launch
+            }
+
+            // check for duplicate
+            val exists = database.getDay(date)
+
+            // insert or update
             if (exists != null) {
                 val editWeight = WeightEntry(exists.weightId, weight, date)
                 update(editWeight)

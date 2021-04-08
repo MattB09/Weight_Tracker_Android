@@ -55,8 +55,8 @@ class DashboardFragment : Fragment() {
         graph.getViewport().setScalableY(true);
         graph.getViewport().setScrollableY(true);
         graph.getViewport().setXAxisBoundsManual(true)
-        graph.getViewport().setMinX(-14.0)
-        graph.getViewport().setMaxX(0.0)
+        graph.getViewport().setMinX(-31.0)
+        graph.getViewport().setMaxX(1.0)
 
 //        var series = LineGraphSeries<DataPoint>()
 //        var y: Double = 66.5; var x: Double = -12.0;
